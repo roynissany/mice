@@ -453,6 +453,14 @@
     .captable td:first-child { font-size:16px;white-space:normal; }
     .captable th { font-size:11px;letter-spacing:.1em;padding-left:10px; }
   }
+  /* Label for a section whose background is a video clip */
+  .vidcap {
+    position:absolute;left:0;bottom:0;z-index:6;padding:14px 6vw 18px;
+    font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;
+    letter-spacing:.16em;text-transform:uppercase;color:rgba(245,247,251,.6);
+    pointer-events:none;
+  }
+  @media(max-width:760px){ .vidcap { font-size:11px;padding:10px 6vw 14px; } }
 </style>
 </head>
 <body>
@@ -865,6 +873,7 @@
   <!-- ARRIVAL BY AIR -->
   <section class="section">
     <div class="bg-video"><video autoplay muted loop playsinline preload="none" data-src="air-bg.mp4"></video></div>
+    <div class="vidcap" data-edit>PC-12 arrival at Balaton Park</div>
     <div class="content">
       <div class="two-col">
         <div>
@@ -881,10 +890,10 @@
         </div>
         <div class="visual reveal slide-right" style="overflow:visible;">
           <div class="gallery-wrap" data-gallery="air">
-            <div class="gallery-slide active"><img src="air-aerial-circuit.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Circuit, strip and the lake beyond</div></div>
-            <div class="gallery-slide"><img data-src="air-cessna-strip.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">On the strip</div></div>
-            <div class="gallery-slide"><img data-src="air-aerial-lake.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Downwind over Balaton</div></div>
-            <div class="gallery-slide"><img data-src="air-aerial-wide.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">The whole site from the air</div></div>
+            <div class="gallery-slide active"><img src="air-aerial-circuit.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">On finals - circuit, strip and the lake beyond</div></div>
+            <div class="gallery-slide"><img data-src="air-cessna-strip.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Cessna on the grass strip, beside the circuit car</div></div>
+            <div class="gallery-slide"><img data-src="air-aerial-lake.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Overhead the circuit, Balaton behind</div></div>
+            <div class="gallery-slide"><img data-src="air-aerial-wide.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">The whole site and the 750 m strip below it</div></div>
           </div>
           <button class="gallery-arrow gallery-prev-intro" onclick="gal('air',-1)">&#8249;</button>
           <button class="gallery-arrow gallery-next-intro" onclick="gal('air',1)">&#8250;</button>
