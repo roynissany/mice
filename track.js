@@ -2,8 +2,11 @@
  *
  * Records one row per page view: where the visitor came from, how long the
  * page was actually on screen, how far they scrolled and whether they used
- * the contact button. No cookie, no IP address and no visitor id is stored,
- * so two visits by the same person are simply two rows.
+ * the contact button, plus their city and the kind of device. No cookie, no IP
+ * address and no visitor id is stored, so two visits by the same person are
+ * simply two rows. The city comes from an IP lookup made in the visitor's own
+ * browser (the same service the client hub uses); only the city and country
+ * are sent on.
  *
  * Tag a link to name its source:  https://mice.balatonpark.com/?s=li
  * Stop counting this device:      add ?notrack=1 once  (undo with ?notrack=0)
@@ -91,6 +94,40 @@
   var tz = '';
   try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch (e) {}
 
+  // ---- what they are on, and roughly where
+  function os() {
+    var u = navigator.userAgent;
+    if (/iPhone|iPod/.test(u)) return 'iPhone';
+    if (/iPad/.test(u) || (/Macintosh/.test(u) && navigator.maxTouchPoints > 1)) return 'iPad';
+    if (/Android/.test(u)) return 'Android';
+    if (/Windows/.test(u)) return 'Windows';
+    if (/Macintosh|Mac OS X/.test(u)) return 'Mac';
+    if (/CrOS/.test(u)) return 'ChromeOS';
+    if (/Linux/.test(u)) return 'Linux';
+    return '';
+  }
+  function browser() {
+    var u = navigator.userAgent;
+    if (/Edg(e|A|iOS)?\//.test(u)) return 'Edge';
+    if (/OPR\/|Opera/.test(u)) return 'Opera';
+    if (/SamsungBrowser/.test(u)) return 'Samsung Internet';
+    if (/FxiOS|Firefox\//.test(u)) return 'Firefox';
+    if (/CriOS|Chrome\//.test(u)) return 'Chrome';
+    if (/Safari\//.test(u)) return 'Safari';
+    return '';
+  }
+  var place = new Promise(function (done) {
+    var t = setTimeout(function () { done({}); }, 4000);
+    fetch('https://ipapi.co/json/').then(function (r) { return r.ok ? r.json() : {}; })
+      .then(function (g) { clearTimeout(t); done(g && !g.error ? g : {}); })
+      .catch(function () { clearTimeout(t); done({}); });
+  });
+  function detail() {
+    place.then(function (g) {
+      call('web_visit_detail', { p_id: id, p_city: g.city || '', p_country: g.country_name || '', p_os: os(), p_browser: browser() }).catch(function () {});
+    });
+  }
+
   call('web_visit_start', {
     p_site: SITE,
     p_source: source(),
@@ -101,6 +138,7 @@
   }).then(function (r) { return r.ok ? r.json() : null; }).then(function (v) {
     if (typeof v !== 'string') return;
     id = v;
+    detail();
     setTimeout(push, 5000);
     setInterval(function () { if (document.visibilityState === 'visible') push(); }, 15000);
   }).catch(function () {});
