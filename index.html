@@ -417,25 +417,19 @@
   .captable td.sqm { color:var(--red); }
   .captable tr:last-child td { border-bottom:none; }
   .capnote { margin-top:1.1rem;max-width:760px;font-size:14.5px; }
-  /* A strip of branding frames under the marquee */
-  .brandstrip { display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:1.7rem;width:100%;max-width:880px; }
-  .brandstrip figure { margin:0; }
-  .brandstrip img { width:100%;height:96px;object-fit:cover;display:block;border:1px solid var(--border); }
-  .brandstrip figcaption {
-    margin-top:6px;font-family:'Barlow Condensed',sans-serif;font-size:11px;
-    letter-spacing:.14em;text-transform:uppercase;color:rgba(245,247,251,.55);
-  }
-  @media(max-width:860px){ .brandstrip { grid-template-columns:repeat(3,1fr); } .brandstrip img { height:78px; } }
-  @media(max-width:520px){ .brandstrip { grid-template-columns:repeat(2,1fr);gap:8px; } }
-  @media(min-width:761px) and (max-height:830px){ .brandstrip { margin-top:1.1rem; } .brandstrip img { height:78px; } }
+  /* Grid items default to min-width:auto, so one long unbroken row - the
+     marquee - can stretch its column and squeeze the other to nothing. */
+  .two-col > * { min-width: 0; }
+  .marquee { max-width: 100%; }
+ }
   .capsub {
     margin:1.25rem 0 .4rem;font-family:'Barlow Condensed',sans-serif;font-weight:800;
     font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);
   }
   .capsub:first-of-type { margin-top:0; }
   .captable td.note {
-    text-align:left;font-size:15.5px;font-weight:400;text-transform:none;letter-spacing:0;
-    color:rgba(245,247,251,.72);white-space:normal;line-height:1.5;
+    text-align:left;font-size:17.5px;font-weight:400;text-transform:none;letter-spacing:0;
+    color:rgba(245,247,251,.82);white-space:normal;line-height:1.5;
   }
 
   /* Plans the client can open or download */
@@ -486,8 +480,6 @@
     h2 { font-size: clamp(34px, 4.4vw, 66px); margin-bottom: 1.1rem; }
     .facilities { gap: .9rem 2.2rem; margin-top: 1.6rem; }
     .marquee { margin-top: 1.5rem; }
-    .brandstrip { margin-top: 1.1rem; }
-    .brandstrip img { height: 78px; }
     .capsub { margin: .9rem 0 .35rem; }
     .captable td { font-size: 17px; padding: 6px 0 6px 12px; }
     .captable td:first-child { font-size: 15px; }
@@ -504,12 +496,9 @@
     .eyebrow { margin-bottom: .8rem; }
     .facilities { gap: .7rem 2rem; margin-top: 1.2rem; }
     .marquee { margin-top: 1.1rem; }
-    .brandstrip { margin-top: .9rem; }
-    .brandstrip img { height: 66px; }
-    .brandstrip figcaption { font-size: 10px; margin-top: 4px; }
     .captable td { font-size: 15.5px; padding: 5px 0 5px 10px; }
     .captable td:first-child { font-size: 14px; }
-    .captable td.note { font-size: 13.5px; line-height: 1.4; }
+    .captable td.note { font-size: 15.5px; line-height: 1.45; }
     .capnote { margin-top: .7rem; font-size: 12.5px; }
     .plan .d { min-height: 26px; font-size: 12px; }
     .plans { gap: 8px; margin-top: 1rem; }
@@ -529,7 +518,7 @@
 
   <!-- 1. HERO -->
   <section class="section">
-    <div class="bg hero-bg" style="background-image:url('p75-festival-crowd.jpg'),url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwC9JewNgfNkdOMVRuYYZcyIrqw7kcVYt4Y/NQbRgjJpGYtcSA9Efao7AU+Zi5THeNHcmRiD6YorTlA81+O/9KKQH//Z')"></div>
+    <div class="bg hero-bg" style="background-image:url('hero-crowd.jpg'),url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABsSFBcUERsXFhceHBsgKEIrKCUlKFE6PTBCYFVlZF9VXVtqeJmBanGQc1tdhbWGkJ6jq62rZ4C8ybqmx5moq6T/2wBDARweHigjKE4rK06kbl1upKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKT/wAARCAALABQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwC8uoXDsAtuuD7mnS31xG3+qi29M+Z3rFUnOMnGDT4+XCknG08ZpA0ap1CdcAwJnHZqKyYxu3Zzw2BzRQOx/9k=')"></div>
     <div class="content">
       <div class="eyebrow reveal light" data-edit>Meetings &middot; Incentives &middot; Conferences &middot; Events</div>
       <h1 class="hero-title reveal d1">
@@ -545,22 +534,33 @@
   <section class="section dark">
     <div class="bg" data-bg="expo-registration.jpg"></div>
     <div class="content">
-      <div class="eyebrow reveal" data-edit>The arrangement</div>
-      <h2 class="reveal d1"><span data-edit>For a day,</span><br><span data-edit>it answers to you.</span></h2>
-      <p class="lead reveal d2" data-edit>The gate closes behind your coaches. Customisable to the tiniest detail and fully brandable. Hall, meeting rooms, terraces, pit lane, garages and the hotel attached to them - all of it under one name, for as long as you have it.</p>
-      <p class="reveal d3" data-edit style="margin-top:1.5rem;">No second group in the building. No one else's lanyards in your photographs.</p>
-      <div class="marquee reveal d4">
+      <div class="two-col">
+        <div>
+          <div class="eyebrow reveal" data-edit>The arrangement</div>
+          <h2 class="reveal d1"><span data-edit>For a day,</span><br><span data-edit>it answers to you.</span></h2>
+          <p class="lead reveal d2" data-edit>The gate closes behind your coaches. Customisable to the tiniest detail and fully brandable. Hall, meeting rooms, terraces, pit lane, garages and the hotel attached to them - all of it under one name, for as long as you have it.</p>
+          <p class="reveal d3" data-edit style="margin-top:1.5rem;">No second group in the building. No one else&rsquo;s lanyards in your photographs.</p>
+          <div class="marquee reveal d4">
         <div class="marquee-track">
           <span data-edit>MotoGP</span><span class="hot" data-edit>Lidl</span><span data-edit>Porsche</span><span data-edit>Telekom</span><span class="hot" data-edit>WorldSBK</span><span data-edit>AstraZeneca</span><span data-edit>Ducati</span><span class="hot" data-edit>Erste Bank</span><span data-edit>Shell</span><span data-edit>Toyota</span><span class="hot" data-edit>MVM</span><span data-edit>Magnum</span><span data-edit>HP</span><span class="hot" data-edit>Emota</span><span data-edit>Pioneer</span><span data-edit>GoldFilms</span>
           <span data-edit>MotoGP</span><span class="hot" data-edit>Lidl</span><span data-edit>Porsche</span><span data-edit>Telekom</span><span class="hot" data-edit>WorldSBK</span><span data-edit>AstraZeneca</span><span data-edit>Ducati</span><span class="hot" data-edit>Erste Bank</span><span data-edit>Shell</span><span data-edit>Toyota</span><span class="hot" data-edit>MVM</span><span data-edit>Magnum</span><span data-edit>HP</span><span class="hot" data-edit>Emota</span><span data-edit>Pioneer</span><span data-edit>GoldFilms</span>
         </div>
-      </div>
-      <div class="brandstrip reveal d5">
-        <figure><img src="p75-flag-avenue.jpg" alt="" loading="lazy"><figcaption data-edit>Flag avenue</figcaption></figure>
-        <figure><img src="p75-welcome-arch.jpg" alt="" loading="lazy"><figcaption data-edit>Branded entrance</figcaption></figure>
-        <figure><img src="drive-pitbuilding-flags.jpg" alt="" loading="lazy"><figcaption data-edit>Pit building</figcaption></figure>
-        <figure><img src="p75-brand-wall.jpg" alt="" loading="lazy"><figcaption data-edit>Display wall</figcaption></figure>
-        <figure><img src="branding-raceborn.jpg" alt="" loading="lazy"><figcaption data-edit>Garage fronts</figcaption></figure>
+          </div>
+        </div>
+        <div class="visual reveal slide-right" style="overflow:visible;">
+          <div class="gallery-wrap" data-gallery="brand">
+            <div class="gallery-slide active"><img src="p75-flag-avenue.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Flag avenue on the approach</div></div>
+            <div class="gallery-slide"><img data-src="p75-welcome-arch.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Branded entrance and stage</div></div>
+            <div class="gallery-slide"><img data-src="drive-pitbuilding-flags.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Pit building, dressed</div></div>
+            <div class="gallery-slide"><img data-src="p75-brand-wall.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Display wall</div></div>
+            <div class="gallery-slide"><img data-src="branding-raceborn.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Garage fronts</div></div>
+            <div class="gallery-slide"><img data-src="p75-banner.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Grandstand banner</div></div>
+            <div class="gallery-slide"><img data-src="p75-stage-show.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Stage and screen</div></div>
+          </div>
+          <button class="gallery-arrow gallery-prev-intro" onclick="gal('brand',-1)">&#8249;</button>
+          <button class="gallery-arrow gallery-next-intro" onclick="gal('brand',1)">&#8250;</button>
+          <div class="gallery-dots" data-dots="brand"></div>
+        </div>
       </div>
     </div>
   </section>
@@ -671,7 +671,7 @@
 
   <!-- 5b. PLANS -->
   <section class="section dark dense">
-    <div class="bg" data-bg="air-helipad.jpg"></div>
+    <div class="bg" data-bg="pit-garages.jpg"></div>
     <div class="content">
       <div class="eyebrow reveal" data-edit>Plans &amp; drawings</div>
       <h2 class="reveal d1"><span data-edit>Measure it</span><br><span data-edit>yourself.</span></h2>
@@ -716,7 +716,6 @@
             <div class="gallery-slide"><img data-src="venue-launch-room.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Driver briefing</div></div>
             <div class="gallery-slide"><img data-src="p75-ferris.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Fairground on the apron</div></div>
             <div class="gallery-slide"><img data-src="drive-helmets-white.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Kit, issued on site</div></div>
-            <div class="gallery-slide"><img data-src="p75-kart-course.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Slalom course</div></div>
             <div class="gallery-slide"><img data-src="p75-performers.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Live performance</div></div>
             <div class="gallery-slide"><img data-src="venue-experience-car.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Experience fleet</div></div>
           </div>
@@ -806,13 +805,28 @@
   </section>
 
   <!-- 8. THE REGION -->
-  <section class="section keep-foot">
-    <div class="bg" data-bg="balaton-lake.jpg" style="background-position:center 38%;"></div>
-    <div class="content center top">
-      <div class="eyebrow reveal light" data-edit>The region</div>
-      <h2 class="reveal d1"><span data-edit>Meeting day,</span><br><span data-edit>holiday week.</span></h2>
-      <p class="lead reveal d2" style="text-align:center;" data-edit>Lake Balaton is Hungary&rsquo;s largest holiday region - beaches and sailing, thermal baths, hillside wineries, and the nightlife of Balatonf&uuml;red across the water. Most of it is a ten to twenty minute drive from the gate, and Budapest is still only an hour away.</p>
-      <p class="reveal d3" style="text-align:center;margin-top:1.2rem;" data-edit>Partner programmes write themselves, and the delegates who stay the weekend pay for it themselves.</p>
+  <section class="section">
+    <div class="bg" data-bg="balaton-lake.jpg" style="background-position:center 30%;"></div>
+    <div class="content">
+      <div class="two-col">
+        <div>
+          <div class="eyebrow reveal" data-edit>The region</div>
+          <h2 class="reveal d1"><span data-edit>Meeting day,</span><br><span data-edit>holiday week.</span></h2>
+          <p class="lead reveal d2" data-edit>Lake Balaton is Hungary&rsquo;s largest holiday region - beaches and sailing, thermal baths, hillside wineries, and the nightlife of Balatonf&uuml;red across the water. Most of it is a ten to twenty minute drive from the gate, and Budapest is still only an hour away.</p>
+          <p class="reveal d3" data-edit style="margin-top:1.5rem;">Partner programmes write themselves, and the delegates who stay the weekend pay for it themselves.</p>
+        </div>
+        <div class="visual reveal slide-right" style="overflow:visible;">
+          <div class="gallery-wrap" data-gallery="region">
+            <div class="gallery-slide active"><img src="region-lake-wide.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">The circuit, and the lake behind it</div></div>
+            <div class="gallery-slide"><img data-src="region-shoreline.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Vineyards and villages on the shore</div></div>
+            <div class="gallery-slide"><img data-src="region-from-air.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Balaton from the circuit&rsquo;s own airfield</div></div>
+            <div class="gallery-slide"><img data-src="region-lake-track.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Ten minutes from the water</div></div>
+          </div>
+          <button class="gallery-arrow gallery-prev-intro" onclick="gal('region',-1)">&#8249;</button>
+          <button class="gallery-arrow gallery-next-intro" onclick="gal('region',1)">&#8250;</button>
+          <div class="gallery-dots" data-dots="region"></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -834,17 +848,15 @@
       <div class="two-col flip">
         <div class="visual reveal slide-left" style="overflow:visible;">
           <div class="gallery-wrap" data-gallery="hosp">
-            <div class="gallery-slide active"><img src="hotel-g-08.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Lavender Park Restaurant</div></div>
-            <div class="gallery-slide"><img data-src="hotel-g-09.jpg" style="object-position:center top;" alt="" loading="lazy"><div class="gallery-caption-intro">Fine dining, track-side</div></div>
+            <div class="gallery-slide active"><img src="hotel-g-09.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Plated at Lavender Park</div></div>
+            <div class="gallery-slide"><img data-src="hosp-canapes.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Canap&eacute;s between sessions</div></div>
+            <div class="gallery-slide"><img data-src="hotel-g-08.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Lavender Park Restaurant</div></div>
+            <div class="gallery-slide"><img data-src="hosp-table-long.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Buffet at pit level</div></div>
             <div class="gallery-slide"><img data-src="hotel-bar.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">The bar</div></div>
-            <div class="gallery-slide"><img data-src="hotel-g-02.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Lobby &amp; atrium</div></div>
-            <div class="gallery-slide"><img data-src="hotel-g-03.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Lavender in the Park</div></div>
-            <div class="gallery-slide"><img data-src="hosp-table-long.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Buffet, pit level</div></div>
-            <div class="gallery-slide"><img data-src="hosp-espresso.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Coffee between sessions</div></div>
-            <div class="gallery-slide"><img data-src="hosp-canapes.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Canap&eacute;s</div></div>
-            <div class="gallery-slide"><img data-src="dining-dish.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Plated at Lavender Park</div></div>
-            <div class="gallery-slide"><img data-src="dining-lavender.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Lavender Park Restaurant</div></div>
+            <div class="gallery-slide"><img data-src="hosp-espresso.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Coffee, poured all day</div></div>
+            <div class="gallery-slide"><img data-src="hotel-g-03.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Dining with the track in view</div></div>
             <div class="gallery-slide"><img data-src="p75-picnic-tables.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Long tables outside</div></div>
+            <div class="gallery-slide"><img data-src="p75-food-crowd.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Street food on the apron</div></div>
           </div>
           <button class="gallery-arrow gallery-prev-intro" onclick="gal('hosp',-1)">&#8249;</button>
           <button class="gallery-arrow gallery-next-intro" onclick="gal('hosp',1)">&#8250;</button>
@@ -862,7 +874,7 @@
 
   <!-- 11. EXHIBITIONS -->
   <section class="section">
-    <div class="bg" data-bg="pit-garages.jpg"></div>
+    <div class="bg" data-bg="p75-crowd-pitbuilding.jpg"></div>
     <div class="content">
       <div class="two-col">
         <div>
@@ -874,10 +886,13 @@
         <div class="visual reveal slide-right" style="overflow:visible;">
           <div class="gallery-wrap" data-gallery="expo">
             <div class="gallery-slide active"><img src="expo-hall-cars.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Cars inside the hall</div></div>
+            <div class="gallery-slide"><img data-src="p75-festival-crowd.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Stalls and activity zones on the apron</div></div>
             <div class="gallery-slide"><img data-src="conf-vw-stand.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Outdoor stands</div></div>
-            <div class="gallery-slide"><img data-src="p75-classics-row.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Display line-up on the apron</div></div>
+            <div class="gallery-slide"><img data-src="p75-crowd-tables.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Branded entrance and food stalls</div></div>
             <div class="gallery-slide"><img data-src="expo-mercedes-stand.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Fleet on the apron</div></div>
-            <div class="gallery-slide"><img data-src="p75-brand-wall.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Brand wall</div></div>
+            <div class="gallery-slide"><img data-src="conf-cupra-tent.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Pavilion on the apron</div></div>
+            <div class="gallery-slide"><img data-src="p75-kids-zone.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Activity zone</div></div>
+            <div class="gallery-slide"><img data-src="p75-brand-wall.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Display wall</div></div>
             <div class="gallery-slide"><img data-src="branding-raceborn.jpg" alt="" loading="lazy"><div class="gallery-caption-intro">Full-site branding</div></div>
           </div>
           <button class="gallery-arrow gallery-prev-intro" onclick="gal('expo',-1)">&#8249;</button>
@@ -951,8 +966,8 @@
           <div class="facilities reveal d4">
             <div class="fac"><span class="dot"></span><span data-edit>Helipad in the paddock</span></div>
             <div class="fac"><span class="dot"></span><span data-edit>750 m strip alongside</span></div>
-            <div class="fac"><span class="dot"></span><span data-edit>Budapest 1h by road</span></div>
-            <div class="fac"><span class="dot"></span><span data-edit>Vienna 2h 15m</span></div>
+            <div class="fac"><span class="dot"></span><span data-edit>Budapest Airport 1h by road</span></div>
+            <div class="fac"><span class="dot"></span><span data-edit>Vienna Airport 2h 15m</span></div>
           </div>
         </div>
         <div class="visual reveal slide-right" style="overflow:visible;">
