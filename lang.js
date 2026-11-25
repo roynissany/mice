@@ -6,7 +6,12 @@
  * simply shows until the table catches up.
  *
  * Same rule as the gift shop: the visitor's browser language decides unless
- * they press HU or EN, and that press is remembered.
+ * they press HU or EN, and that press is remembered. A ?lang=hu or ?lang=en
+ * on the URL wins over both, so an outreach link can land in one language.
+ *
+ * Labels that live in attributes (aria-label, title, placeholder) are swapped
+ * too. A key may hold %n in place of a number, so one entry covers Slide 1,
+ * Slide 2 and the rest.
  */
 (function (global) {
   'use strict';
@@ -18,7 +23,22 @@
   var SKIP = 'script,style,noscript,svg,.marquee-track,.langpick,[data-no-i18n]';
   var LETTER = /[A-Za-zÀ-ſ]/;
 
+  var ATTRS = ['aria-label', 'title', 'placeholder'];
+
   function norm(s) { return String(s).replace(/\s+/g, ' ').trim(); }
+
+  // A key may carry %n where a number sits, so "Slide 1" and "Slide 2" both
+  // come off one entry.
+  function lookup(en) {
+    var k = norm(en), t = HU[k];
+    if (t) return t;
+    var m = k.match(/^(.*?)(\d+)(.*)$/);
+    if (m) {
+      var tpl = HU[m[1] + '%n' + m[3]];
+      if (tpl) return tpl.replace('%n', m[2]);
+    }
+    return null;
+  }
 
   // An element is translated whole only if everything inside it is inline
   // text furniture. Anything holding blocks is left alone and its loose text
@@ -29,7 +49,19 @@
     return true;
   }
 
-  var units = null;
+  var units = null, attrs = null;
+
+  function collectAttrs() {
+    var out = [];
+    ATTRS.forEach(function (a) {
+      document.querySelectorAll('[' + a + ']').forEach(function (el) {
+        if (el.closest(SKIP)) return;
+        var v = el.getAttribute(a);
+        if (v && LETTER.test(v)) out.push({ el: el, attr: a, en: v });
+      });
+    });
+    return out;
+  }
 
   function collect() {
     var out = [], seen = [];
@@ -55,6 +87,7 @@
   function apply(lang) {
     if (!units) {
       units = collect();
+      attrs = collectAttrs();
       var d = document.querySelector('meta[name="description"]');
       meta = { title: document.title, desc: d, descEn: d ? d.getAttribute('content') : '' };
     }
@@ -62,7 +95,7 @@
     units.forEach(function (u) {
       // data-hu on an element overrides the table, for the few places where
       // the same English needs different Hungarian depending on the sentence.
-      var tr = hu ? ((u.el && u.el.getAttribute('data-hu')) || HU[norm(u.en)]) : null;
+      var tr = hu ? ((u.el && u.el.getAttribute('data-hu')) || lookup(u.en)) : null;
       if (u.el) {
         u.el.innerHTML = tr || u.en;
       } else {
@@ -71,8 +104,12 @@
         u.node.nodeValue = tr ? lead + tr + tail : u.en;
       }
     });
-    document.title = (hu && HU[norm(meta.title)]) || meta.title;
-    if (meta.desc) meta.desc.setAttribute('content', (hu && HU[norm(meta.descEn)]) || meta.descEn);
+    attrs.forEach(function (a) {
+      var tr = hu ? lookup(a.en) : null;
+      a.el.setAttribute(a.attr, tr || a.en);
+    });
+    document.title = (hu && lookup(meta.title)) || meta.title;
+    if (meta.desc) meta.desc.setAttribute('content', (hu && lookup(meta.descEn)) || meta.descEn);
     document.documentElement.lang = hu ? 'hu' : 'en';
     document.querySelectorAll('.langpick button').forEach(function (b) {
       b.setAttribute('aria-pressed', b.getAttribute('data-lang') === lang ? 'true' : 'false');
@@ -82,7 +119,18 @@
   function saved() {
     try { return localStorage.getItem(STORE); } catch (e) { return null; }
   }
+  // ?lang=hu or ?lang=en on the URL wins, and is remembered from then on.
+  function fromQuery() {
+    var m = /[?&]lang=(hu|en)(?![a-z])/i.exec(location.search);
+    return m ? m[1].toLowerCase() : null;
+  }
+
   function initial() {
+    var q = fromQuery();
+    if (q) {
+      try { localStorage.setItem(STORE, q); } catch (e) {}
+      return q;
+    }
     var s = saved();
     if (s === 'hu' || s === 'en') return s;
     var nav = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
