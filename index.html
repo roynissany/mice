@@ -1206,6 +1206,50 @@
   }, { threshold: 0.18 });
   document.querySelectorAll('.reveal, .visual').forEach(el => io.observe(el));
 </script>
+<script>
+/* Client-wall marquee. Driven from requestAnimationFrame rather than a CSS
+   animation: a compositor-run animation on a track this wide (5000px+) let the
+   browser drop raster tiles that were still on screen, so the left-most logo
+   vanished with a hard edge through its neighbour. Setting the transform each
+   frame keeps the painted area in step with what is visible. The loop distance
+   is measured (first item to its copy) instead of assumed to be -50%. The CSS
+   animation stays in the stylesheet as the no-script fallback. */
+(function(){
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  Array.prototype.forEach.call(document.querySelectorAll('.marquee-track'), function(track){
+    var kids = track.children, n = kids.length;
+    if (n < 2 || n % 2) return;
+    var DURATION = 80;                 // seconds per loop, as the CSS animation ran
+    var half = 0, x = 0, last = 0, visible = true, raf = 0;
+    function measure(){ half = kids[n/2].getBoundingClientRect().left - kids[0].getBoundingClientRect().left; }
+    track.style.animation = 'none';
+    track.style.willChange = 'transform';
+    measure();
+    if ('ResizeObserver' in window) new ResizeObserver(measure).observe(track);
+    window.addEventListener('load', measure);
+    if (reduce) return;
+    function frame(t){
+      raf = 0;
+      if (!visible) { last = 0; return; }
+      if (last && half > 0) {
+        var dt = Math.min(t - last, 100) / 1000;   // a background tab must not jump ahead
+        x = (x + half / DURATION * dt) % half;
+        track.style.transform = 'translate3d(' + (-x).toFixed(2) + 'px,0,0)';
+      }
+      last = t;
+      raf = requestAnimationFrame(frame);
+    }
+    function start(){ if (!raf) raf = requestAnimationFrame(frame); }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function(es){
+        visible = es[es.length-1].isIntersecting;
+        if (visible) start();
+      }, { rootMargin: '200px' }).observe(track.parentNode);
+    }
+    start();
+  });
+})();
+</script>
 <script src="hu.js?v=20261124a"></script>
 <script src="lang.js?v=20261124a"></script>
 <script src="track.js?v=20261124b" data-site="mice" defer></script>
