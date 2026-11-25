@@ -497,6 +497,16 @@
     pointer-events:none;
   }
   @media(max-width:760px){ .vidcap { font-size:11px;padding:10px 6vw 14px; } }
+  /* A 16:9 clip stretched over a portrait viewport crops to a narrow,
+     heavily upscaled slice of itself. On phones the clip runs as a band
+     at the top of the section and fades into the page instead, and the
+     label goes - the gallery covers that corner on a phone anyway. */
+  @media(max-width:760px){
+    .bg-video { bottom:auto;height:56vh; }
+    .bg-video video, .bg-video-right video { object-position:50% center; }
+    .bg-video::after { background:linear-gradient(180deg,rgba(10,20,34,.22) 0%,rgba(10,20,34,.55) 62%,var(--navy-deep) 100%); }
+    .vidcap { display:none; }
+  }
 
   /* Short screens. Proximity snapping stops settling the moment a section
      grows taller than the viewport, and the page then scrolls free, so the
