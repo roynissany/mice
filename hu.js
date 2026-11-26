@@ -209,6 +209,7 @@ window.BPC_HU = {
 "at": "a",
 "Build your dream event, affordably.": "Építse fel álmai rendezvényét - megfizethetően.",
 "Come Visit <span>→</span>": "Látogasson el hozzánk <span>→</span>",
+"Get a Quote": "Kérjen ajánlatot",
 "Car Brands": "Autómárkák",
 "MICE at Balaton Park": "MICE a Balaton Parkban",
 "Conferences, incentives, team days and gala dinners at Balaton Park Circuit - a panoramic hall over the pit lane, meeting rooms, a 4-star hotel in the paddock and a homologated circuit outside the window.": "Konferenciák, incentive programok, csapatnapok és gálavacsorák a Balaton Park Circuiten - panorámaterem a boxutca fölött, tárgyalók, négycsillagos szálloda a paddockban és homologizált versenypálya az ablakon túl.",
