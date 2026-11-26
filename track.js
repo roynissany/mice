@@ -70,14 +70,20 @@
 
   function seconds() { return Math.round((active + (since ? Date.now() - since : 0)) / 1000); }
 
+  var room = 0, viewH = 0, tops = [];
+  function remeasure() {
+    var el = document.scrollingElement || document.documentElement;
+    room = el.scrollHeight - el.clientHeight;
+    viewH = el.clientHeight;
+    tops = sections.map(function (s) { return s.offsetTop; });
+  }
   function measure() {
     var el = document.scrollingElement || document.documentElement;
-    var room = el.scrollHeight - el.clientHeight;
     var pct = room > 0 ? Math.round(el.scrollTop / room * 100) : 100;
     if (pct > scroll) scroll = Math.min(pct, 100);
-    var mid = el.scrollTop + el.clientHeight / 2;
-    for (var i = sections.length - 1; i >= 0; i--) {
-      if (sections[i].offsetTop <= mid) { if (i + 1 > deepest) deepest = i + 1; break; }
+    var mid = el.scrollTop + viewH / 2;
+    for (var i = tops.length - 1; i >= 0; i--) {
+      if (tops[i] <= mid) { if (i + 1 > deepest) deepest = i + 1; break; }
     }
   }
 
@@ -142,6 +148,11 @@
     setTimeout(push, 5000);
     setInterval(function () { if (document.visibilityState === 'visible') push(); }, 15000);
   }).catch(function () {});
+
+  remeasure();
+  addEventListener('resize', remeasure, { passive: true });
+  addEventListener('load', remeasure);
+  if ('ResizeObserver' in window) new ResizeObserver(remeasure).observe(document.body);
 
   var ticking = false;
   addEventListener('scroll', function () {

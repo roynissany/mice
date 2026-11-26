@@ -39,11 +39,12 @@
   ::selection { background: var(--red); color: white; }
   .progress {
     position: fixed; top: 0; left: 0;
-    height: 3px; width: 0;
+    height: 3px; width: 100%;
+    transform: scaleX(0); transform-origin: 0 50%;
     background: var(--red);
     z-index: 100;
     box-shadow: 0 0 10px var(--red-glow);
-    transition: width .15s ease-out;
+    will-change: transform;
   }
   .topbar {
     position: fixed;
@@ -72,7 +73,7 @@
   .section {
     position: relative;
     min-height: 100vh;
-    min-height: 100dvh;
+    min-height: 100svh;
     overflow: hidden;
     scroll-snap-align: start;
     display: flex;
@@ -1084,13 +1085,24 @@
   const topbar = document.getElementById('topbar');
   const parallaxEnabled = window.matchMedia('(pointer: fine)').matches && window.innerWidth > 760;
 
+  const sections = document.querySelectorAll('.section');
+  let scrollRange = 0, scrollTicking = false;
+  function measureScroll() {
+    const h = document.documentElement;
+    scrollRange = h.scrollHeight - h.clientHeight;
+  }
+  function requestScroll() {
+    if (scrollTicking) return;
+    scrollTicking = true;
+    requestAnimationFrame(() => { scrollTicking = false; onScroll(); });
+  }
   function onScroll() {
     const h = document.documentElement;
-    const pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
-    progress.style.width = pct + '%';
-    topbar.classList.toggle('scrolled', h.scrollTop > 60);
+    const top = h.scrollTop;
+    progress.style.transform = 'scaleX(' + (scrollRange > 0 ? top / scrollRange : 0) + ')';
+    topbar.classList.toggle('scrolled', top > 60);
     if (!parallaxEnabled) return;
-    document.querySelectorAll('.section').forEach(s => {
+    sections.forEach(s => {
       const r = s.getBoundingClientRect();
       if (r.bottom > 0 && r.top < window.innerHeight) {
         const bg = s.querySelector('.bg');
@@ -1201,8 +1213,12 @@
   }, { rootMargin: '60% 0px' });
   document.querySelectorAll('video[data-src]').forEach(function (v) { vidIO.observe(v); });
 
-  document.addEventListener('scroll', onScroll, { passive: true });
+  document.addEventListener('scroll', requestScroll, { passive: true });
+  measureScroll();
   onScroll();
+  addEventListener('resize', function () { measureScroll(); requestScroll(); }, { passive: true });
+  addEventListener('load', measureScroll);
+  if ('ResizeObserver' in window) new ResizeObserver(measureScroll).observe(document.body);
 
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => {
@@ -1257,5 +1273,5 @@
 </script>
 <script src="hu.js?v=20261126a"></script>
 <script src="lang.js?v=20261125a"></script>
-<script src="track.js?v=20261124b" data-site="mice" defer></script>
+<script src="track.js?v=20261126a" data-site="mice" defer></script>
 </body></html>
